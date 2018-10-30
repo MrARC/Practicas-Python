@@ -12,4 +12,3 @@ if apetito:
     print("Y apetito, puedo comer")
 else:
     print("No tengo apetito")
-

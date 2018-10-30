@@ -11,7 +11,6 @@ d = 7
 
 # Debe evaluar a True, ya que a y b pertenecen al mismo tipo
 print(a is b)
-
 # False
 print(b is c)
 
@@ -20,4 +19,3 @@ b = [1, 2, 3, 4]
 
 # Ahora b no apunta al mismo objeto que a, debe ser False
 print(b is a)
-
