@@ -1,6 +1,2 @@
 {
-    "python.pythonPath": "C:\\Users\\mrarc\\.vscode_bats\\python3.bat",
-    "python.linting.pylintPath": "C:\\Users\\mrarc\\.vscode_bats\\pylint.bat",
-    "python.workspaceSymbols.ctagsPath": "C:\\Users\\mrarc\\.vscode_bats\\ctags.bat",
-    "python.formatting.provider": "black"
 }
