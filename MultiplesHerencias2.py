@@ -14,6 +14,7 @@ class Batman(Superhero, Bat):
         Superhero.__init__(
             self, "anonymous", movie=True, superpowers=["Wealthy"], *args, **kwargs
         )
+        # args va primero porque can_fly pertenece a un diccionario
         Bat.__init__(self, *args, can_fly=True, **kwargs)
         # hacer override del atributo name heredado
         self.name = "Ben Affleck"
