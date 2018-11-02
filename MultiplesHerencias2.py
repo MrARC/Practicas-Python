@@ -54,4 +54,3 @@ if __name__ == "__main__":
 
     can_i_fly = "Yes" if superhero.fly else "No"
     superhero.say(f"Can i fly? {can_i_fly}")  # => Ben Affleck: Can i fly? Yes
-
