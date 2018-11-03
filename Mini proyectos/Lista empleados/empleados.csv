@@ -1,5 +1,5 @@
-nombre,apellido,puesto,desde,trabajando
-Alfonso,Reyes Cortés,Gerente,02/11/2018,true
-Daniel,Tejeda Delgado,CEO,02/11/2018,true
-Aldo Daniel,Figueroa Valle,Limpiador,03/11/2018,false
-Maria Andrea, Calderon Lopez, CEO, null
+nombre,apellido,puesto
+Alfonso,Reyes Cortés,Gerente
+Daniel,Tejeda Delgado,CEO
+Aldo Daniel,Figueroa Valle,Limpiador
+Maria Andrea,Calderon Lopez,CEO

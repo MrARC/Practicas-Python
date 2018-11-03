@@ -16,7 +16,7 @@ class Sistema:
             # flush podemos escribir todo lo del buffer a la terminal sin esperar
             nDots += 1
             print('.', end='', flush=True)
-            time.sleep(0.08)
+            time.sleep(0.02)
             if nDots >= 30:
                 loading = False
 
@@ -47,18 +47,20 @@ class Sistema:
     @classmethod
     def getInput(self, msg):
         opcion = input(msg)
-        self.handleInput(int(opcion))
+        if opcion is not '':
+            self.handleInput(int(opcion))
 
     @classmethod
     def obtenerEmpleados(self):
         with open("empleados.csv") as csvFile:
             csvReader = csv.reader(csvFile, delimiter=',')
             next(csvReader) # saltar el header
-            print('Nombre\t\tApellido\t\tPuesto')
+            print('Nombre'.ljust(15), end='')
+            print('Apellido'.ljust(20), end='')
+            print('Puesto'.ljust(25), end='')
+            print('\n')
             for row in csvReader:
-                print(row[0], end='\t')
-                print(row[1], end='\t')
-                print(row[2], end='\t')
+                print(row[0].ljust(15) + row[1].ljust(20) + row[2].ljust(25))
                 print('\n')
 
     @classmethod
@@ -78,6 +80,8 @@ class Sistema:
             self.añadirEmpleado()
         if opcion == 2:
             self.obtenerEmpleados()
+        if opcion == 0:
+            exit()
 
 # Se executa si el código es el archivo principal
 if __name__ == "__main__":
