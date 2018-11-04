@@ -1,7 +1,6 @@
 import time
 import sys
 import csv
-from Empleado import Empleado
 
 
 class Sistema:
@@ -28,7 +27,7 @@ class Sistema:
         print("\n")
         for elemento in self.obtenerElementosMenu():
             if elemento == "/h":
-                print("------------------------------")
+                print("-" * 30)
             else:
                 print(f"{elemento}")
         self.getInput("Introduce la opción que deseas seleccionar: ")
@@ -67,6 +66,8 @@ class Sistema:
             self.añadirEmpleado()
         if opcion == 2:
             self.obtenerEmpleados()
+        if opcion == 3:
+            self.modificarEmpleado()
         if opcion == 4:
             self.eliminarEmpleado()
         if opcion == 0:
@@ -80,6 +81,7 @@ class Sistema:
             empleados = []
             for row in csvReader:
                 empleados.append((row[0], row[1], row[2], row[3]))
+            empleados = sorted(empleados, key=lambda tup: tup[0])
 
             def header():
                 print("\n----------------------------------")
@@ -106,18 +108,18 @@ class Sistema:
                     print("Nombre".ljust(20), end="")
                     print("Apellido".ljust(25), end="")
                     print("Puesto".ljust(25))
-                    print("----------------------------------")
+                    print("-" * 30)
                     elementos = pagActual * 5
                     try:
                         for x in range(elementos - 5, elementos):
                             empleado = empleados[x]
                             nombreEmpleado = (
-                                empleado[1][:15] + "..."
+                                empleado[1][:15] + ".."
                                 if len(empleado[1]) >= 15
                                 else empleado[1]
                             )
                             apellidoEmpleado = (
-                                empleado[2][:15] + "..."
+                                empleado[2][:15] + ".."
                                 if len(empleado[2]) >= 15
                                 else empleado[2]
                             )
@@ -130,7 +132,7 @@ class Sistema:
                     except IndexError:
                         # fix temporal por si se sale del rango de la lista
                         pass
-                    print("----------------------------------")
+                    print("-" * 30)
 
                 def bottom():
                     texto_indicador = ""
@@ -193,6 +195,48 @@ class Sistema:
             time.sleep(2)
 
     @classmethod
+    def modificarEmpleado(self):
+        print("\nHas seleccionado modificar empleado")
+        time.sleep(1)
+        nId = False
+        while nId == False:
+            print("- Ahora introduce el ID del empleado -")
+            idModificar = input("ID: ")
+            with open("empleados.csv") as csvFile:
+                reader = csv.reader(csvFile, delimiter=",")
+                listaEmpleados = list(reader)
+                for row in listaEmpleados:
+                    if row[0] == idModificar:
+                        nId = True
+                        print("\nDatos empleado a modificar:")
+                        print(f"Nombre: {row[1]}")
+                        print(f"Apellido: {row[2]}")
+                        print(f"Puesto: {row[3]}")
+                        print("-" * 30)
+                        # Solicitar nuevos datos
+                        nuevoNombre = input("Nuevo nombre: ")
+                        nuevoApellido = input("Nuevo apellido: ")
+                        nuevoPuesto = input("Nuevo puesto: ")
+                        # borrar empleado viejo e insertar el nuevo
+                        listaEmpleados.remove(row)
+                        listaEmpleados.append(
+                            [idModificar, nuevoNombre, nuevoApellido, nuevoPuesto]
+                        )
+                        with open("empleados.csv", "w") as csvWrite:
+                            writer = csv.writer(
+                                csvWrite, delimiter=",", quoting=csv.QUOTE_MINIMAL
+                            )
+                            for empleado in listaEmpleados:
+                                writer.writerow(
+                                    [empleado[0], empleado[1], empleado[2], empleado[3]]
+                                )
+                            print("Empleado eliminado")
+                            time.sleep(2)
+                            break
+                if nId == False:
+                    print("Empleado no encontrado")
+
+    @classmethod
     def eliminarEmpleado(self):
         print("\nHas seleccionado eliminar empleado")
         time.sleep(1)
@@ -222,6 +266,7 @@ class Sistema:
                 else:
                     print("No se encontro este empleado")
                     time.sleep(2)
+
 
 # Se executa si el código es el archivo principal
 if __name__ == "__main__":
