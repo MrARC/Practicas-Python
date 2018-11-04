@@ -29,7 +29,7 @@ class Sistema:
             "1 - Añadir empleado",
             "2 - Listar empleados",
             "3 - Modificar empleado",
-            "4 - Ver empleado",
+            "4 - Eliminar empleado",
             "0 - Salir",
             "/h",
         ]
@@ -65,18 +65,19 @@ class Sistema:
     def obtenerEmpleados(self):
         with open("empleados.csv") as csvFile:
             csvReader = csv.reader(csvFile, delimiter=",")
-            next(csvReader)  # saltar el header
             # paginador
             empleados = []
             for row in csvReader:
-                empleados.append((row[0], row[1], row[2]))
+                empleados.append((row[0], row[1], row[2], row[3]))
+
             def header():
                 print("\n----------------------------------")
                 print("Lista de empleados AURA")
                 print(f"Empleados registrados: {len(empleados)}")
                 print("----------------------------------")
+
             if len(empleados) == 0:
-                print('No hay empleados añadidos')
+                print("No hay empleados añadidos")
                 time.sleep(2)
             else:
                 # maxima cantidad de empleados por pag = 5
@@ -86,21 +87,34 @@ class Sistema:
                 if (len(empleados) % 5) > 0:
                     nPags += 1
                 pagActual = 1
+
                 def lista():
                     header()
                     print("Pagina: {0}/{1}".format(pagActual, nPags))
-                    print("Nombre".ljust(15), end="")
-                    print("Apellido".ljust(20), end="")
+                    print("ID".ljust(5), end="")
+                    print("Nombre".ljust(20), end="")
+                    print("Apellido".ljust(25), end="")
                     print("Puesto".ljust(25))
                     print("----------------------------------")
                     elementos = pagActual * 5
                     try:
                         for x in range(elementos - 5, elementos):
                             empleado = empleados[x]
+                            nombreEmpleado = (
+                                empleado[1][:15] + "..."
+                                if len(empleado[1]) >= 15
+                                else empleado[1]
+                            )
+                            apellidoEmpleado = (
+                                empleado[2][:15] + "..."
+                                if len(empleado[2]) >= 15
+                                else empleado[2]
+                            )
                             print(
-                                empleado[0].ljust(15)
-                                + empleado[1].ljust(20)
-                                + empleado[2].ljust(25)
+                                empleado[0].ljust(5)
+                                + nombreEmpleado.ljust(20)
+                                + apellidoEmpleado.ljust(25)
+                                + empleado[3].ljust(25)
                             )
                     except IndexError:
                         # fix temporal por si se sale del rango de la lista
@@ -110,7 +124,9 @@ class Sistema:
                 def bottom():
                     texto_indicador = ""
                     if pagActual > 1 and pagActual != nPags:
-                        texto_indicador = "Pag anterior: A | Siguiente pag: S | Salir: 0"
+                        texto_indicador = (
+                            "Pag anterior: A | Siguiente pag: S | Salir: 0"
+                        )
                     elif pagActual == nPags:
                         texto_indicador = "Pag anterior: A | Salir: 0"
                     else:
@@ -148,11 +164,23 @@ class Sistema:
         nombre = input("Nombre: ")
         apellido = input("Apellido: ")
         puesto = input("Puesto de trabajo: ")
+        ids = []
+        # obtener ids:
+        with open("empleados.csv", "r") as csvFile:
+            reader = csv.reader(csvFile, delimiter=",")
+            for row in reader:
+                ids.append(row[0])
+        if len(ids) == 0:
+            ids.append(0)
+        # last id:
+        idNuevoEmpleado = int(ids[-1]) + 1
         # abrir archivo como escribible y hacer append
         with open("empleados.csv", "a") as csvFile:
-            writer = csv.writer(csvFile, lineterminator="\n", delimiter=",", quoting=csv.QUOTE_MINIMAL)
-            writer.writerow([nombre, apellido, puesto])
-            print('Empleado añadido')
+            writer = csv.writer(
+                csvFile, delimiter=",", quoting=csv.QUOTE_MINIMAL
+            )
+            writer.writerow([idNuevoEmpleado, nombre, apellido, puesto])
+            print("Empleado añadido")
             time.sleep(2)
 
     @classmethod
@@ -168,6 +196,5 @@ class Sistema:
 # Se executa si el código es el archivo principal
 if __name__ == "__main__":
     sistema = Sistema()
-    menuActivo = True
-    while menuActivo:
+    while True:
         sistema.imprimirMenu()
