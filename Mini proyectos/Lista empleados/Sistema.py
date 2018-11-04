@@ -70,73 +70,75 @@ class Sistema:
             empleados = []
             for row in csvReader:
                 empleados.append((row[0], row[1], row[2]))
-
             def header():
                 print("\n----------------------------------")
                 print("Lista de empleados AURA")
                 print(f"Empleados registrados: {len(empleados)}")
                 print("----------------------------------")
+            if len(empleados) == 0:
+                print('No hay empleados añadidos')
+                time.sleep(2)
+            else:
+                # maxima cantidad de empleados por pag = 5
+                nPags = len(empleados) // 5
+                nPags = 1 if nPags == 0 else nPags
+                # fix por si queda algun elemento fuera de la pag
+                if (len(empleados) % 5) > 0:
+                    nPags += 1
+                pagActual = 1
+                def lista():
+                    header()
+                    print("Pagina: {0}/{1}".format(pagActual, nPags))
+                    print("Nombre".ljust(15), end="")
+                    print("Apellido".ljust(20), end="")
+                    print("Puesto".ljust(25))
+                    print("----------------------------------")
+                    elementos = pagActual * 5
+                    try:
+                        for x in range(elementos - 5, elementos):
+                            empleado = empleados[x]
+                            print(
+                                empleado[0].ljust(15)
+                                + empleado[1].ljust(20)
+                                + empleado[2].ljust(25)
+                            )
+                    except IndexError:
+                        # fix temporal por si se sale del rango de la lista
+                        pass
+                    print("----------------------------------")
 
-            # maxima cantidad de empleados por pag = 5
-            nPags = len(empleados) // 5
-            nPags = 1 if nPags == 0 else nPags
-            # fix por si queda algun elemento fuera de la pag
-            if (len(empleados) % 5) > 0:
-                nPags += 1
-            pagActual = 1
-
-            def lista():
-                header()
-                print("Pagina: {0}/{1}".format(pagActual, nPags))
-                print("Nombre".ljust(15), end="")
-                print("Apellido".ljust(20), end="")
-                print("Puesto".ljust(25))
-                print("----------------------------------")
-                elementos = pagActual * 5
-                try:
-                    for x in range(elementos - 5, elementos):
-                        empleado = empleados[x]
-                        print(
-                            empleado[0].ljust(15)
-                            + empleado[1].ljust(20)
-                            + empleado[2].ljust(25)
-                        )
-                except IndexError:
-                    pass
-                print("----------------------------------")
-
-            def bottom():
-                texto_indicador = ""
-                if pagActual > 1 and pagActual != nPags:
-                    texto_indicador = "Pag anterior: A | Siguiente pag: S | Salir: 0"
-                elif pagActual == nPags:
-                    texto_indicador = "Pag anterior: A | Salir: 0"
-                else:
-                    texto_indicador = "Siguiente pag: S | Salir: 0"
-                print(texto_indicador)
-
-            while True:
-                self.limpiarConsola()
-                lista()
-                bottom()
-                sigOpcion = input("Selecciona una opción: ")
-                if sigOpcion == "A" or sigOpcion == "a":
-                    if pagActual >= 2:
-                        pagActual -= 1
+                def bottom():
+                    texto_indicador = ""
+                    if pagActual > 1 and pagActual != nPags:
+                        texto_indicador = "Pag anterior: A | Siguiente pag: S | Salir: 0"
+                    elif pagActual == nPags:
+                        texto_indicador = "Pag anterior: A | Salir: 0"
                     else:
-                        print("Opción no permitida")
-                        time.sleep(2)
-                elif sigOpcion == "S" or sigOpcion == "s":
-                    if pagActual >= 1 and pagActual != nPags:
-                        pagActual += 1
+                        texto_indicador = "Siguiente pag: S | Salir: 0"
+                    print(texto_indicador)
+
+                while True:
+                    self.limpiarConsola()
+                    lista()
+                    bottom()
+                    sigOpcion = input("Selecciona una opción: ")
+                    if sigOpcion == "A" or sigOpcion == "a":
+                        if pagActual >= 2:
+                            pagActual -= 1
+                        else:
+                            print("Opción no permitida")
+                            time.sleep(2)
+                    elif sigOpcion == "S" or sigOpcion == "s":
+                        if pagActual >= 1 and pagActual != nPags:
+                            pagActual += 1
+                        else:
+                            print("Opción no permitida")
+                            time.sleep(2)
+                    elif sigOpcion == "0":
+                        break
                     else:
-                        print("Opción no permitida")
+                        print("Comando desconocido")
                         time.sleep(2)
-                elif sigOpcion == "0":
-                    break
-                else:
-                    print("Comando desconocido")
-                    time.sleep(2)
 
     @classmethod
     def añadirEmpleado(self):
@@ -147,8 +149,8 @@ class Sistema:
         apellido = input("Apellido: ")
         puesto = input("Puesto de trabajo: ")
         # abrir archivo como escribible y hacer append
-        with open("empleados.csv", "a", newline="") as csvFile:
-            writer = csv.writer(csvFile, delimiter=",", quoting=csv.QUOTE_MINIMAL)
+        with open("empleados.csv", "a") as csvFile:
+            writer = csv.writer(csvFile, lineterminator="\n", delimiter=",", quoting=csv.QUOTE_MINIMAL)
             writer.writerow([nombre, apellido, puesto])
             print('Empleado añadido')
             time.sleep(2)
