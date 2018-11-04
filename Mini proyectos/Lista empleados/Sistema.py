@@ -21,6 +21,22 @@ class Sistema:
             if nDots >= 30:
                 loading = False
 
+    # Imprime el menu del sistema:
+    @classmethod
+    def imprimirMenu(self):
+        self.limpiarConsola()
+        print("\n")
+        for elemento in self.obtenerElementosMenu():
+            if elemento == "/h":
+                print("------------------------------")
+            else:
+                print(f"{elemento}")
+        self.getInput("Introduce la opción que deseas seleccionar: ")
+
+    @classmethod
+    def limpiarConsola(self):
+        print("\n" * 100)
+
     @classmethod
     def obtenerElementosMenu(self) -> list:
         return [
@@ -34,18 +50,6 @@ class Sistema:
             "/h",
         ]
 
-    # Imprime el menu del sistema:
-    @classmethod
-    def imprimirMenu(self):
-        self.limpiarConsola()
-        print("\n")
-        for elemento in self.obtenerElementosMenu():
-            if elemento == "/h":
-                print("------------------------------")
-            else:
-                print(f"{elemento}")
-        self.getInput("Introduce la opción que deseas seleccionar: ")
-
     # Captura la entrada del teclado
     @classmethod
     def getInput(self, msg):
@@ -58,8 +62,15 @@ class Sistema:
                 time.sleep(2)
 
     @classmethod
-    def limpiarConsola(self):
-        print("\n" * 100)
+    def handleInput(self, opcion: int):
+        if opcion == 1:
+            self.añadirEmpleado()
+        if opcion == 2:
+            self.obtenerEmpleados()
+        if opcion == 4:
+            self.eliminarEmpleado()
+        if opcion == 0:
+            exit()
 
     @classmethod
     def obtenerEmpleados(self):
@@ -176,22 +187,41 @@ class Sistema:
         idNuevoEmpleado = int(ids[-1]) + 1
         # abrir archivo como escribible y hacer append
         with open("empleados.csv", "a") as csvFile:
-            writer = csv.writer(
-                csvFile, delimiter=",", quoting=csv.QUOTE_MINIMAL
-            )
+            writer = csv.writer(csvFile, delimiter=",", quoting=csv.QUOTE_MINIMAL)
             writer.writerow([idNuevoEmpleado, nombre, apellido, puesto])
             print("Empleado añadido")
             time.sleep(2)
 
     @classmethod
-    def handleInput(self, opcion: int):
-        if opcion == 1:
-            self.añadirEmpleado()
-        if opcion == 2:
-            self.obtenerEmpleados()
-        if opcion == 0:
-            exit()
-
+    def eliminarEmpleado(self):
+        print("\nHas seleccionado eliminar empleado")
+        time.sleep(1)
+        nId = False
+        while nId == False:
+            print("- Ahora introduce el ID del empleado -")
+            idEliminar = input("ID: ")
+            with open("empleados.csv") as csvFile:
+                reader = csv.reader(csvFile, delimiter=",")
+                listaEmpleados = list(reader)
+                for row in listaEmpleados:
+                    if row[0] == idEliminar:
+                        nId = True
+                        listaEmpleados.remove(row)
+                if nId:
+                    with open("empleados.csv", "w") as csvWrite:
+                        writer = csv.writer(
+                            csvWrite, delimiter=",", quoting=csv.QUOTE_MINIMAL
+                        )
+                        for empleado in listaEmpleados:
+                            writer.writerow(
+                                [empleado[0], empleado[1], empleado[2], empleado[3]]
+                            )
+                        print("Empleado eliminado")
+                        time.sleep(2)
+                        break
+                else:
+                    print("No se encontro este empleado")
+                    time.sleep(2)
 
 # Se executa si el código es el archivo principal
 if __name__ == "__main__":
