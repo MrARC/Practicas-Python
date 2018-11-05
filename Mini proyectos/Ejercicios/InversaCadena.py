@@ -7,6 +7,7 @@ def inversa(cadena: str) -> str:
         indice -= 1
         cont -= 1
     return newCadena
+    # forma más corta:
     # return cadena[::-1]
 
 texto = input('Introduce un texto para voltearlo: ')
