@@ -10,9 +10,9 @@ vocales = "aeiou"
 lista = []
 
 for i in cadena:
-    for x in vocales:
-        if i == x:
-            lista.append(i)
+        for x in vocales:
+                if i == x:
+                        lista.append(i)
 
 def contar_vocales(l, v):
         print(f"Hay {l.count(v)} '{v}' en la palabra '{cadena}'")

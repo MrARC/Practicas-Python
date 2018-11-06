@@ -5,8 +5,3 @@ def convertir_a_entero(binario: int) -> int:
 
 binario = input('Introduce el num binario a convertir a decimal: ')
 print(f'Conversión a decimal: {convertir_a_entero(int(binario))}')
-
-for i in 'cadena':
-    for x in 'vocales':
-        if i == x:
-            lista.append(i)
