@@ -230,7 +230,7 @@ class Sistema:
                                 writer.writerow(
                                     [empleado[0], empleado[1], empleado[2], empleado[3]]
                                 )
-                            print("Empleado eliminado")
+                            print("Empleado modificado")
                             time.sleep(2)
                             break
                 if nId == False:

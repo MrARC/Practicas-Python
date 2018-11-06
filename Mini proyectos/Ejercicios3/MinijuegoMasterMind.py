@@ -34,7 +34,7 @@ def iniciarJuego(longitud: int):
     )
     print('-'*50)
     # ciclo de juego
-    while maxIntentos < 25:
+    while intentos < maxIntentos:
         tryN = ""
         while True:
             tryN = int(input(f'Introduce un num ({longitud} cifras): '))
@@ -58,7 +58,8 @@ def iniciarJuego(longitud: int):
             print('-'*30)
             print('\n')
             break
-        print(f'\n✅   Has acertado {adivinados} cifras de {len(str(nRandom))}', end='')
+        simbolo = '✅' if adivinados >= 1 else '🚫'
+        print(f'\n{simbolo}   Has acertado {adivinados} cifras de {len(str(nRandom))}', end='')
         intentos += 1
         print(f' | 🔮   Tienes {maxIntentos-intentos} intentos\n')
     if intentos > 24:
