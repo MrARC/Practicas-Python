@@ -15,39 +15,54 @@ def randomDigits(digits):
     upper = 10 ** digits - 1
     return random.randint(lower, upper)
 
-
 def iniciarJuego(longitud: int):
     nRandom = randomDigits(longitud)
-    print(f"SECRET KEY: {nRandom}")
-    print('-'*50)
-    print(
-        f"🧠  MASTERMIND | Vamos a iniciar un juego, es muy fácil,\ntú trataras de adivinar un numero de  🎰  {longitud} cifras."
-        "\nSi fallas 25 veces pierdes :) te estaré dando pistas cuando te acerques al resultado."
-        "\nBuena suerte 🍀"
-    )
-    print('-'*50)
     # definir intentos y bucle de intentos
-    intentos = 0
+    maxIntentos = longitud * 20
+    intentos = 0 # cuantas veces se ha equivocado
     # rellenar clave maestra en vector
     claveMaestra = []
     for l in str(nRandom):
         claveMaestra.append(l)
-    # primer intento
-    while intentos <= 25:
-        tryN = int(input(f'Introduce un num ({longitud} cifras): '))
+    # llave secreta
+    print(f"SECRET KEY: {nRandom}")
+    print('-'*50)
+    print(
+        f"🧠  MASTERMIND | Vamos a iniciar un juego, es muy fácil,\ntú trataras de adivinar un numero de  🎰  {longitud} cifras."
+        f"\nSi fallas {maxIntentos} veces pierdes :) te estaré dando pistas cuando te acerques al resultado."
+        "\nBuena suerte 🍀"
+    )
+    print('-'*50)
+    # ciclo de juego
+    while maxIntentos < 25:
+        tryN = ""
+        while True:
+            tryN = int(input(f'Introduce un num ({longitud} cifras): '))
+            if len(str(tryN)) < longitud or len(str(tryN)) > longitud:
+                print(f'Tu respuesta debe ser de {longitud} cifras!')
+            else:
+                break
         tryN = str(tryN)
         adivinados = 0
         pos = 0
         for valorIntento in tryN:
-            for valorReal in claveMaestra:
-                if valorIntento == valorReal:
-                    adivinados+=1
-                pos += 1
-        print(f'\n✅   Has acertado {adivinados} cifras', end='')
+            if valorIntento == claveMaestra[pos]:
+                adivinados+=1
+            pos+=1
+        if(adivinados == longitud):
+            print('\n')
+            print('-'*30)
+            print(f'🏆 🎉   ¡FELICIDADES!   👍  ✅')
+            print(f'Has adivinado el numero correcto ({nRandom})')
+            print(f'Te ha tomado {intentos} intentos!')
+            print('-'*30)
+            print('\n')
+            break
+        print(f'\n✅   Has acertado {adivinados} cifras de {len(str(nRandom))}', end='')
         intentos += 1
-        print(f'| 🔮   Tienes {25-intentos} intentos\n')
-    if intentos > 25:
-        print('🚨 ¡HAS PERDIDO! 💀')
+        print(f' | 🔮   Tienes {maxIntentos-intentos} intentos\n')
+    if intentos > 24:
+        print('🚨\t¡HAS PERDIDO!\t💀')
 while True:
     longitud = int(
         input("Introduce la longitud de la cadena a adivinar (2 a 9 cifras): ")
