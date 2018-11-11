@@ -37,7 +37,10 @@ def iniciarJuego(longitud: int):
     while intentos < maxIntentos:
         tryN = ""
         while True:
-            tryN = int(input(f'Introduce un num ({longitud} cifras): '))
+            try:
+                tryN = int(input(f'Introduce un num ({longitud} cifras): '))
+            except ValueError:
+                print(f'Solo puedes introducir numeros!')
             if len(str(tryN)) < longitud or len(str(tryN)) > longitud:
                 print(f'Tu respuesta debe ser de {longitud} cifras!')
             else:
